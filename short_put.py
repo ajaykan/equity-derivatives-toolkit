@@ -1,5 +1,7 @@
 import yfinance as yf
 import datetime
+import matplotlib
+import numpy as np
 
 basket = ["AMD", "AMZN", "FB", "GOOG", "DIS", "JPM"]
 
@@ -30,8 +32,10 @@ def str_to_date(date):
 
 
 def price_range(ticker_obj, days): # returns tuple (min, max, days)
-    time = str(days) + "days"
-    hist = ticker_obj.history(period=time)
+    assert(days > 0), "Number of days > 0"
+
+    delta = str(days) + "d"
+    hist = ticker_obj.history(period=delta)
     high = max(hist['High'])
     low = min(hist['Low'])
     return (low, high, days)
@@ -51,7 +55,27 @@ def price_by_date(ticker_obj, date, time="Close"): # time: {Open, High, Low, Clo
     except:
         return "Non trading day"
 
+def moving_average(ticker_obj, days): # past trading days
+    assert (days > 1), "MA >= 2 days"
+
+    delta = str(days) + "d"
+    hist = ticker_obj.history(period=delta)
+    return round(np.mean(hist["Close"]), 2)
+
 
 past_date = datetime.date(2020, 10, 15)
 
-print(price_by_date(amd, past_date))
+def list_ma(ticker_obj, lst_days):
+    ma = []
+    for i in lst_days:
+        ma.append(moving_average(ticker_obj, i))
+    current_price = moving_average(ticker_obj, 3)
+
+    return (ticker_obj, current_price, lst_days, ma)
+
+days = [15, 30, 60, 120]
+
+def composite_weighting(ticker_obj, lst_days):
+    return 
+
+print(list_ma(jpm, days))
