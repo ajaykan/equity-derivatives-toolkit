@@ -98,23 +98,36 @@ class Position:
 
         #positions
         self.shares = 0
+        self.avg_cost = 0
+        self.net_position = 0
     
     
     def update_ma(self):
         ind_ma = ma_test(self.obj)
 
 
-    def new_position(self, share_change):
-        self.shares += share_change
+    def add_position(self, share_count, avg_cost):
+        self.shares += share_count
+        self.net_position += share_count * avg_cost
+        self.avg_cost = round(self.net_position / self.shares, 2)
 
-    # def __repr__(self):
-    #     yesterday = datetime.date.today() - datetime.timedelta(daays=1)
-    #     price = "Closing price " + str(yesterday) +  price_by_date(self.obj, )
+    def __str__(self):
+        return("""
+        
+        MA test: {bool}
+
+        Shares: {shares}
+        Avg. Cost: {cost}
+
+        """.format(bool=self.ind_ma, shares=self.shares, cost=self.avg_cost))
+        
 
 
 
 amd_pos = Position(amd)
 aapl_pos = Position(yf.Ticker("AAPL"))
+aapl_pos.add_position(100, 450)
+aapl_pos.add_position(200, 420)
 
 
-print(aapl_pos.shares)
+print(aapl_pos)
