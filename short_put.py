@@ -1,5 +1,5 @@
-import yfinance as yf
 import datetime
+import yfinance as yf
 import matplotlib
 import numpy as np
 
@@ -31,14 +31,16 @@ def str_to_date(date):
 # END
 
 
-def price_range(ticker_obj, days): # returns tuple (min, max, days)
+def price_range(ticker_obj, days): # returns tuple (min, max, real days)
     assert(days > 0), "Number of days > 0"
 
+    delta = int(round(delta * (5/7)))
     delta = str(days) + "d"
     hist = ticker_obj.history(period=delta)
     high = max(hist['High'])
     low = min(hist['Low'])
-    return (low, high, days)
+    return (low, high, int(delta))
+
 
 def price_by_date(ticker_obj, date, time="Close"): # time: {Open, High, Low, Close}
     today = datetime.date.today()
@@ -55,15 +57,17 @@ def price_by_date(ticker_obj, date, time="Close"): # time: {Open, High, Low, Clo
     except:
         return "Non trading day"
 
-def moving_average(ticker_obj, days): # past trading days
-    assert (days > 1), "MA >= 2 days"
 
+def moving_average(ticker_obj, days): # past real days
+    assert (days > 1), "MA >= 2 days"
+    
+    days = int(round(days * (5/7)))
     delta = str(days) + "d"
     hist = ticker_obj.history(period=delta)
+
     return round(np.mean(hist["Close"]), 2)
 
 
-past_date = datetime.date(2020, 10, 15)
 
 def list_ma(ticker_obj, lst_days):
     ma = []
@@ -71,11 +75,46 @@ def list_ma(ticker_obj, lst_days):
         ma.append(moving_average(ticker_obj, i))
     current_price = moving_average(ticker_obj, 3)
 
-    return (ticker_obj, current_price, lst_days, ma)
+    return (ticker_obj, current_price, lst_days, ma) # [ticker, price, [days], [mas]]
 
-days = [15, 30, 60, 120]
 
-def composite_weighting(ticker_obj, lst_days):
-    return 
+def ma_test(ticker_obj):
+    days = [50, 200]
+    ma = list_ma(ticker_obj, days)
+    ma = ma[3]
+    return ma[0] > ma[1]
 
-print(list_ma(jpm, days))
+
+
+class Position:
+    
+    def __init__(self, ticker_obj):
+        assert(isinstance(ticker_obj, type(yf.Ticker('AMD'))))
+        
+        self.obj = ticker_obj
+        
+        # technical indicators
+        self.ind_ma = ma_test(self.obj)
+
+        #positions
+        self.shares = 0
+    
+    
+    def update_ma(self):
+        ind_ma = ma_test(self.obj)
+
+
+    def new_position(self, share_change):
+        self.shares += share_change
+
+    # def __repr__(self):
+    #     yesterday = datetime.date.today() - datetime.timedelta(daays=1)
+    #     price = "Closing price " + str(yesterday) +  price_by_date(self.obj, )
+
+
+
+amd_pos = Position(amd)
+aapl_pos = Position(yf.Ticker("AAPL"))
+
+
+print(aapl_pos.shares)
