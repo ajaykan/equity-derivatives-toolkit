@@ -23,13 +23,15 @@ options = ticker_objs[0].option_chain(exp[3]) # option chain for 9/10/2020
 
 # UTILITY
 
-def str_to_date(date):
+def str_to_date(date):  # returns date not datetime
     date = date.split("-")
     date = list(map(int, date))
     return datetime.date(date[0], date[1], date[2])
 
 # END
 
+
+# TOOLS
 
 def price_range(ticker_obj, days): # returns tuple (min, max, real days)
     assert(days > 0), "Number of days > 0"
@@ -75,10 +77,10 @@ def list_ma(ticker_obj, lst_days):
         ma.append(moving_average(ticker_obj, i))
     current_price = moving_average(ticker_obj, 3)
 
-    return (ticker_obj, current_price, lst_days, ma) # [ticker, price, [days], [mas]]
+    return (ticker_obj, current_price, lst_days, ma) # [ticker, price, [days], [averages]]
 
 
-def ma_test(ticker_obj):
+def ma_test(ticker_obj): # return bool
     days = [50, 200]
     ma = list_ma(ticker_obj, days)
     ma = ma[3]
@@ -87,9 +89,18 @@ def ma_test(ticker_obj):
 
 
 class Position:
+
+    valid = True
     
     def __init__(self, ticker_obj):
-        assert(isinstance(ticker_obj, type(yf.Ticker('AMD'))))
+        
+        object_type = type(yf.Ticker('AMD'))
+        try:
+            assert(isinstance(ticker_obj, object_type))
+        except:
+            self.valid = False
+            print("Enter valid ticker_obj")
+            return
         
         self.obj = ticker_obj
         
@@ -122,6 +133,30 @@ class Position:
         """.format(bool=self.ind_ma, shares=self.shares, cost=self.avg_cost))
         
 
+class Option:
+
+    def __init__(self, ticker_obj, expiry, strike, put):
+        self.obj = ticker_obj
+        if isinstance(expiry, str):
+            expiry = str_to_date(expiry)
+            self.expiry = expiry
+        else:
+            self.expiry = expiry
+        self.strike = strike
+        self.put = put # bool
+        
+    def dte(self):
+        today = datetime.date.today()
+        delta = self.expiry - today
+        if delta.days < 0:
+            return("Option expired")
+        return delta.days
+
+    def last_price(self):
+
+        return
+        
+
 
 
 amd_pos = Position(amd)
@@ -129,5 +164,9 @@ aapl_pos = Position(yf.Ticker("AAPL"))
 aapl_pos.add_position(100, 450)
 aapl_pos.add_position(200, 420)
 
+sample_date_future = datetime.date(2020, 11, 15)
 
-print(aapl_pos)
+opt1 = Option(amd, sample_date_future, 80, False)
+print(opt1.dte())
+
+# print(options.calls)
