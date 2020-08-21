@@ -1,3 +1,3 @@
 # short_put
 
-This tool is designed to sell put option premium for consistent profits
+This is a tool I designed/use to sell cash-secured puts (CSP) as a way for consistent income. 
