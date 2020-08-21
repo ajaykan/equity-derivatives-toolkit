@@ -1,3 +1,5 @@
-# short_put
+# Selling options
 
-This is a tool I designed/use to sell cash-secured puts (CSP) as a way for consistent income. 
+This repo contains tools I designed/use to sell cash-secured puts (CSP) and covered calls (CC) for consistent income. 
+
+short_put
