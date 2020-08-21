@@ -28,6 +28,18 @@ def str_to_date(date):  # returns date not datetime
     date = list(map(int, date))
     return datetime.date(date[0], date[1], date[2])
 
+def date_to_str(date):
+    year = str(date.year)
+    month = date.month
+    if month < 10:
+        month = "0" + str(month)
+    month = str(month)
+    day = date.day
+    if day < 10:
+        day = "0" + str(day)
+    day = str(day)
+    return "{year}-{month}-{day}".format(year=year, month=month, day=day)
+
 # END
 
 
@@ -93,7 +105,6 @@ class Position:
     valid = True
     
     def __init__(self, ticker_obj):
-        
         object_type = type(yf.Ticker('AMD'))
         try:
             assert(isinstance(ticker_obj, object_type))
@@ -102,15 +113,16 @@ class Position:
             print("Enter valid ticker_obj")
             return
         
+        # meta
         self.obj = ticker_obj
         
-        # technical indicators
+        # indicators
         self.ind_ma = ma_test(self.obj)
 
-        #positions
+        # positions
         self.shares = 0
         self.avg_cost = 0
-        self.net_position = 0
+        self.net_cost = 0
     
     
     def update_ma(self):
@@ -119,7 +131,7 @@ class Position:
 
     def add_position(self, share_count, avg_cost):
         self.shares += share_count
-        self.net_position += share_count * avg_cost
+        self.net_cost += share_count * avg_cost
         self.avg_cost = round(self.net_position / self.shares, 2)
 
     def __str__(self):
@@ -136,6 +148,9 @@ class Position:
 class Option:
 
     def __init__(self, ticker_obj, expiry, strike, put):
+        assert(isinstance(ticker_obj, type(yf.Ticker("AMD")))), "Invalid ticker_obj"
+        assert(date_to_str(expiry) in ticker_obj.options), "Invalid expiry"
+        
         self.obj = ticker_obj
         if isinstance(expiry, str):
             expiry = str_to_date(expiry)
@@ -153,7 +168,12 @@ class Option:
         return delta.days
 
     def last_price(self):
-
+        chain = self.obj.option_chain(self.expiry)
+        if self.put:
+            chain = chain.puts
+        else:
+            chain = chain.calls
+        
         return
         
 
@@ -164,9 +184,6 @@ aapl_pos = Position(yf.Ticker("AAPL"))
 aapl_pos.add_position(100, 450)
 aapl_pos.add_position(200, 420)
 
-sample_date_future = datetime.date(2020, 11, 15)
+sample_date_future = datetime.date(2020, 9, 10)
 
 opt1 = Option(amd, sample_date_future, 80, False)
-print(opt1.dte())
-
-# print(options.calls)
