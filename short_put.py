@@ -3,7 +3,7 @@ import yfinance as yf
 import numpy as np
 
 import matplotlib.pyplot as plt
-import seaborn as sns
+import seaborn as sb
 import pandas as pd
 
 basket = ["AMD", "AMZN", "FB", "GOOG", "DIS", "JPM"]
@@ -42,6 +42,14 @@ def date_to_str(date):
         day = "0" + str(day)
     day = str(day)
     return "{year}-{month}-{day}".format(year=year, month=month, day=day)
+
+def date_concat(date): # returns string, concat version of date 2020-07-24 -> 7/24/20 
+    if isinstance(date, str):
+        date = str_to_date(date)
+    month = str(date.month)
+    day = str(date.day)
+    year = str(date.year % 100)
+    return("{month}/{day}/{year}".format(month=month, day=day, year=year))
 
 # END
 
@@ -112,11 +120,14 @@ def past_price(ticker_obj, days): # past real days
     today = date_to_str(datetime.date.today())
     
     close = list(hist['Close'])
-    days = [i for i in range(len(close))]
-    df = pd.DataFrame({"Price": close, "Days": days})
+    days_list = [i for i in range(len(close))]
+    df = pd.DataFrame({"Price": close, "Days": days_list})
     
-    sns.relplot(x="Days", y="Price", data=df)
+    plot = sb.lineplot(x="Days", y="Price", data=df)
+    plot.set(xlabel=("{start} to {today} ~ {days} days").format(start=date_concat(start_date), today=date_concat(today), days=days))
+    plot.set(ylabel=str(ticker_obj.info['symbol'] + " Price"))
     plt.show()
+    return
 
 # CLASSES: Position, Option
 
@@ -208,4 +219,4 @@ sample_date_future = datetime.date(2020, 9, 10)
 
 opt1 = Option(amd, sample_date_future, 80, False)
 
-past_price(amd, 30)
+past_price(amd, 300)
