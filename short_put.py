@@ -1,7 +1,10 @@
 import datetime
 import yfinance as yf
-import matplotlib
 import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 
 basket = ["AMD", "AMZN", "FB", "GOOG", "DIS", "JPM"]
 
@@ -48,8 +51,8 @@ def date_to_str(date):
 def price_range(ticker_obj, days): # returns tuple (min, max, real days)
     assert(days > 0), "Number of days > 0"
 
-    delta = int(round(delta * (5/7)))
-    delta = str(days) + "d"
+    delta = int(round(days * (5/7)))
+    delta = str(delta) + "d"
     hist = ticker_obj.history(period=delta)
     high = max(hist['High'])
     low = min(hist['Low'])
@@ -92,13 +95,30 @@ def list_ma(ticker_obj, lst_days):
     return (ticker_obj, current_price, lst_days, ma) # [ticker, price, [days], [averages]]
 
 
-def ma_test(ticker_obj): # return bool
+def ma_test(ticker_obj): # returns boolean
     days = [50, 200]
     ma = list_ma(ticker_obj, days)
     ma = ma[3]
     return ma[0] > ma[1]
 
 
+# VISUALIZATIONS
+
+def past_price(ticker_obj, days): # past real days
+    delta = int(round(days * (5/7)))
+    delta = str(delta) + "d"
+    hist = ticker_obj.history(period=delta)
+    start_date = date_to_str(hist.index[0].date())
+    today = date_to_str(datetime.date.today())
+    
+    close = list(hist['Close'])
+    days = [i for i in range(len(close))]
+    df = pd.DataFrame({"Price": close, "Days": days})
+    
+    sns.relplot(x="Days", y="Price", data=df)
+    plt.show()
+
+# CLASSES: Position, Option
 
 class Position:
 
@@ -122,7 +142,7 @@ class Position:
         # positions
         self.shares = 0
         self.avg_cost = 0
-        self.net_cost = 0
+        self.net_cost = 0 # just shares * avg cost
     
     
     def update_ma(self):
@@ -132,7 +152,7 @@ class Position:
     def add_position(self, share_count, avg_cost):
         self.shares += share_count
         self.net_cost += share_count * avg_cost
-        self.avg_cost = round(self.net_position / self.shares, 2)
+        self.avg_cost = round(self.net_cost / self.shares, 2)
 
     def __str__(self):
         return("""
@@ -187,3 +207,5 @@ aapl_pos.add_position(200, 420)
 sample_date_future = datetime.date(2020, 9, 10)
 
 opt1 = Option(amd, sample_date_future, 80, False)
+
+past_price(amd, 30)
