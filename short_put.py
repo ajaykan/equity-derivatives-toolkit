@@ -93,8 +93,7 @@ def moving_average(ticker_obj, days): # past real days
     return round(np.mean(hist["Close"]), 2)
 
 
-
-def list_ma(ticker_obj, lst_days):
+def list_ma(ticker_obj, lst_days): # CONSOLIDATE w above and below
     ma = []
     for i in lst_days:
         ma.append(moving_average(ticker_obj, i))
@@ -112,7 +111,7 @@ def ma_test(ticker_obj): # returns boolean
 
 # VISUALIZATIONS
 
-def past_price(ticker_obj, days): # past real days
+def past_price(ticker_obj, days): # past real days, automatically displays graph
     delta = int(round(days * (5/7)))
     delta = str(delta) + "d"
     hist = ticker_obj.history(period=delta)
@@ -179,8 +178,8 @@ class Position:
 class Option:
 
     def __init__(self, ticker_obj, expiry, strike, put):
-        assert(isinstance(ticker_obj, type(yf.Ticker("AMD")))), "Invalid ticker_obj"
-        assert(date_to_str(expiry) in ticker_obj.options), "Invalid expiry"
+        assert(isinstance(ticker_obj, type(yf.Ticker("AMD")))), "Option error: invalid ticker_obj"
+        assert(date_to_str(expiry) in ticker_obj.options), "Option error: invalid expiry"
         
         self.obj = ticker_obj
         if isinstance(expiry, str):
@@ -198,14 +197,15 @@ class Option:
             return("Option expired")
         return delta.days
 
-    def last_price(self):
-        chain = self.obj.option_chain(self.expiry)
+    def option_data(self): # returns dataframe of options info
+        exp_date = date_to_str(self.expiry)
+        chain = self.obj.option_chain(exp_date)
         if self.put:
             chain = chain.puts
         else:
             chain = chain.calls
-        
-        return
+        option_data = chain[chain['strike'] == self.strike]
+        return option_data
         
 
 
@@ -215,8 +215,8 @@ aapl_pos = Position(yf.Ticker("AAPL"))
 aapl_pos.add_position(100, 450)
 aapl_pos.add_position(200, 420)
 
-sample_date_future = datetime.date(2020, 9, 10)
+sample_date_future = datetime.date(2020, 10, 15)
 
-opt1 = Option(amd, sample_date_future, 80, False)
+opt1 = Option(amd, sample_date_future, 90, True)
 
-past_price(amd, 300)
+print(opt1.option_data())
