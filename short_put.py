@@ -52,6 +52,14 @@ def date_concat(date): # returns string, concat version of date 2020-07-24 -> 7/
     year = str(date.year % 100)
     return("{month}/{day}/{year}".format(month=month, day=day, year=year))
 
+def nearest_expiry(expirations, date): # takes as input list of expiration dates, and date, returns expiration with (expiry - dates) < 3 days
+    for expiry in expirations:
+        expiry = str_to_date(expiry)
+        delta = (expiry - date).days
+        if abs(delta) <= 3:
+            return expiry
+    return ValueError("No expiration within 3 days of date")
+
 # END
 
 
@@ -128,100 +136,21 @@ def past_price(ticker_obj, days): # past real days, automatically displays graph
     plot.set(ylabel=str(ticker_obj.info['symbol'] + " Price"))
     plt.show()
     return
-
-# CLASSES: Position, Option
-
-# class Position:
-
-#     valid = True
-    
-#     def __init__(self, ticker_obj):
-#         object_type = type(yf.Ticker('AMD'))
-#         try:
-#             assert(isinstance(ticker_obj, object_type))
-#         except:
-#             self.valid = False
-#             print("Enter valid ticker_obj")
-#             return
-        
-#         # meta
-#         self.obj = ticker_obj
-#         self.options = [] # list of current option positions
-
-#         # stock info
-#         self.annual_div = 0
-        
-#         # indicators
-#         self.ind_ma = ma_test(self.obj)
-
-#         # positions
-#         self.shares = 0
-#         self.avg_cost = 0
-#         self.net_cost = 0 # just shares * avg cost
-    
-    
-#     def update_ma(self):
-#         ind_ma = ma_test(self.obj)
-
-
-#     def add_position(self, share_count, avg_cost):
-#         self.shares += share_count
-#         self.net_cost += share_count * avg_cost
-#         self.avg_cost = round(self.net_cost / self.shares, 2)
-
-#     def __str__(self):
-#         return("""
-        
-#         MA test: {bool}
-
-#         Shares: {shares}
-#         Avg. Cost: {cost}
-
-#         """.format(bool=self.ind_ma, shares=self.shares, cost=self.avg_cost))
         
 
-# class Option:
-
-#     def __init__(self, ticker_obj, expiry, strike, put):
-#         assert(isinstance(ticker_obj, type(yf.Ticker("AMD")))), "Option error: invalid ticker_obj"
-#         assert(date_to_str(expiry) in ticker_obj.options), "Option error: invalid expiry"
-        
-#         self.obj = ticker_obj
-#         if isinstance(expiry, str):
-#             expiry = str_to_date(expiry)
-#             self.expiry = expiry
-#         else:
-#             self.expiry = expiry
-#         self.strike = strike
-#         self.put = put # bool
-        
-#     def dte(self):
-#         today = datetime.date.today()
-#         delta = self.expiry - today
-#         if delta.days < 0:
-#             return("Option expired")
-#         return delta.days
-
-#     def option_data(self): # returns dataframe of options info
-#         exp_date = date_to_str(self.expiry)
-#         chain = self.obj.option_chain(exp_date)
-#         if self.put:
-#             chain = chain.puts
-#         else:
-#             chain = chain.calls
-#         option_data = chain[chain['strike'] == self.strike]
-#         return option_data
-        
-
-
+# WORKSPACE
 
 amd_pos = Position(amd)
 aapl_pos = Position(yf.Ticker("AAPL"))
 aapl_pos.add_position(100, 450)
 aapl_pos.add_position(200, 420)
 
-sample_date_future = datetime.date(2020, 10, 1)
+sample_date_future = datetime.date(2020, 10, 20)
 
-opt1 = Option(amd, sample_date_future, 75, True)
 
-print(aapl_pos)
+opt1 = Option(fb, sample_date_future, 300, False)
+
+expirations = fb.options
+
+print(opt1.option_data())
+
