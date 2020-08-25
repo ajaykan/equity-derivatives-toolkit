@@ -1,6 +1,6 @@
 # Theta Strategy
 
-This repo contains tools I designed/use to sell cash-secured puts (CSP) for consistent income. These tools use probability to optimize your likelihood of profit. Documentation will be updated periodically.
+This repo contains tools I designed/use to sell cash-secured puts (CSP) for consistent income. These tools use probability to optimize your likelihood of profit. Documentation will be updated as needed.
 
 `classes.py`: user defined objects
   - `Position`: user position in one stock
