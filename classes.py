@@ -107,11 +107,17 @@ class Position:
 
 class Option:
 
-
     def __init__(self, ticker_obj, expiry, strike, put):
         self.obj = ticker_obj
+        self.strike = strike
+        self.put = put # bool
         if isinstance(expiry, str):
             expiry = str_to_date(expiry)
+        
+        # options data
+        self.price = 0
+        self.days = 0
+
 
         assert(isinstance(ticker_obj, type(yf.Ticker("AMD")))), "Option error: invalid ticker_obj"
         # assert(date_to_str(expiry) in ticker_obj.options), "Option error: invalid expiry"
@@ -120,10 +126,11 @@ class Option:
             expiration = nearest_expiry(self.obj.options, expiry)
             self.expiry = expiration
         except:
+            self.expiry = False
             raise ValueError("No expiry found within 3 days of date")
 
-        self.strike = strike
-        self.put = put # bool
+        self.update()
+
         
     def dte(self):
         today = datetime.date.today()
@@ -133,6 +140,8 @@ class Option:
         return delta.days
 
     def option_data(self): # returns dataframe of options info
+        if not self.expiry:
+            return("Invalid option; err1")
         exp_date = date_to_str(self.expiry)
         chain = self.obj.option_chain(exp_date)
         if self.put:
@@ -147,3 +156,24 @@ class Option:
         if today <= self.expiry:
             return False
         return True
+
+    def update(self):
+        self.price = round(self.option_data()['lastPrice'].iloc[0], 2)
+        self.days = self.dte()
+        return
+
+    def __str__(self):
+        self.update()
+        if self.put:
+            option = "P"
+        else:
+            option = "C"
+        return("""
+
+        Position: {expiry} {obj} {strike}{call}
+        
+        Last price: {price}
+        DTE: {dte}
+
+        """.format(expiry=self.expiry, obj=self.obj.info['symbol'], strike=self.strike, call=option, 
+        price=self.price, dte=self.days))

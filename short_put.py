@@ -145,12 +145,14 @@ aapl_pos = Position(yf.Ticker("AAPL"))
 aapl_pos.add_position(100, 450)
 aapl_pos.add_position(200, 420)
 
-sample_date_future = datetime.date(2020, 10, 20)
+sample_date_future = datetime.date(2020, 10, 16)
+sample_date_future_2 = datetime.date(2020, 9, 11)
 
 
-opt1 = Option(fb, sample_date_future, 300, False)
+bought = Option(fb, sample_date_future, 300, False)
+sold = Option(fb, sample_date_future_2, 300, False)
 
-expirations = fb.options
 
-print(opt1.option_data())
+
+print(bought.price)
 
