@@ -102,18 +102,23 @@ def moving_average(ticker_obj, days): # past real days
     return round(np.mean(hist["Close"]), 2)
 
 
-def list_ma(ticker_obj, lst_days): # CONSOLIDATE w above and below
+def ma_data(ticker_obj, lst_days): # CONSOLIDATE w above and below
     ma = []
     for i in lst_days:
         ma.append(moving_average(ticker_obj, i))
     current_price = moving_average(ticker_obj, 3)
+    pct_diff = []
+    for i in ma:
+        val_diff = current_price - i
+        pct_chg = round(val_diff / i * 100, 2)
+        pct_diff.append(pct_chg)
 
-    return (ticker_obj, current_price, lst_days, ma) # [ticker, price, [days], [averages]]
+    return (ticker_obj, current_price, lst_days, ma, pct_diff) # [ticker, price, [days], [averages], [pct_diff]]
 
 
 def ma_test(ticker_obj): # returns boolean
     days = [50, 200]
-    ma = list_ma(ticker_obj, days)
+    ma = ma_data(ticker_obj, days)
     ma = ma[3]
     return ma[0] > ma[1]
 
@@ -152,7 +157,5 @@ sample_date_future_2 = datetime.date(2020, 9, 11)
 bought = Option(fb, sample_date_future, 300, False)
 sold = Option(fb, sample_date_future_2, 300, False)
 
-
-
-print(bought.price)
+print(ma_data(jpm, [50, 200]))
 
