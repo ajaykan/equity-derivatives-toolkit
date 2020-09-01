@@ -155,7 +155,7 @@ sample_date_future_2 = datetime.date(2020, 9, 11)
 
 
 bought = Option(fb, sample_date_future, 300, False)
-sold = Option(fb, sample_date_future_2, 300, False)
+sold = Option(fb, sample_date_future_2, 300, True)
 
-print(ma_data(jpm, [50, 200]))
+print(sold)
 

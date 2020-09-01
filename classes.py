@@ -1,5 +1,6 @@
 import yfinance as yf
 import datetime
+import numpy as np
 
 # START UTILITY
 
@@ -35,6 +36,15 @@ def nearest_expiry(expirations, date): # takes as input list of expiration dates
         if abs(delta) <= 3:
             return expiry
     return ValueError("No expiration within 3 days of date")
+
+def moving_average(ticker_obj, days): # past real days
+    assert (days > 1), "MA >= 2 days"
+    
+    days = int(round(days * (5/7)))
+    delta = str(days) + "d"
+    hist = ticker_obj.history(period=delta)
+
+    return round(np.mean(hist["Close"]), 2)
 
 # END UTILITY
 
@@ -116,7 +126,10 @@ class Option:
         
         # options data
         self.price = 0
-        self.days = 0
+        self.dte = 0
+
+        # price
+        self.collateral = self.strike * 100
 
 
         assert(isinstance(ticker_obj, type(yf.Ticker("AMD")))), "Option error: invalid ticker_obj"
@@ -131,8 +144,7 @@ class Option:
 
         self.update()
 
-        
-    def dte(self):
+    def days_til(self):
         today = datetime.date.today()
         delta = self.expiry - today
         if delta.days < 0:
@@ -159,8 +171,21 @@ class Option:
 
     def update(self):
         self.price = round(self.option_data()['lastPrice'].iloc[0], 2)
-        self.days = self.dte()
+        self.dte = self.days_til()
         return
+
+    def pct_otm(self): # stock is $40, strike is $32, pct_otm = 0.20
+        self.update()
+        underlying_price = moving_average(self.obj, 3)
+        delta = underlying_price - self.strike
+        pct_otm = round(delta / underlying_price, 3)
+        return pct_otm
+
+    def pct_yield(self):
+        self.update()
+        premium = self.price * 100
+        pct_yield = round(premium / self.collateral, 4)
+        return pct_yield
 
     def __str__(self):
         self.update()
@@ -175,5 +200,10 @@ class Option:
         Last price: {price}
         DTE: {dte}
 
+        pct_otm = {otm}
+        yield = {yields}
+
         """.format(expiry=self.expiry, obj=self.obj.info['symbol'], strike=self.strike, call=option, 
-        price=self.price, dte=self.days))
+        price=self.price, dte=self.dte, otm=self.pct_otm(), yields=self.pct_yield()))
+
+    
