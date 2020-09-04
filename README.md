@@ -22,3 +22,6 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
 
 Assumptions:
 - 3 day MA to measure price
+
+
+Options pricing accuracy can vary during market hours
