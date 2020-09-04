@@ -174,11 +174,16 @@ class Option:
         self.dte = self.days_til()
         return
 
-    def pct_otm(self): # stock is $40, strike is $32, pct_otm = 0.20
+    def pct_otm(self): # Puts: stock is $40, strike is $32, pct_otm = 0.20; opposite for Call
         self.update()
         underlying_price = moving_average(self.obj, 3)
-        delta = underlying_price - self.strike
-        pct_otm = round(delta / underlying_price, 3)
+
+        if self.put:
+            delta = underlying_price - self.strike
+            pct_otm = round(delta / underlying_price, 4)
+        else:
+            delta = self.strike - underlying_price
+            pct_otm = round(delta / underlying_price, 4)
         return pct_otm
 
     def pct_yield(self):
@@ -189,21 +194,28 @@ class Option:
 
     def __str__(self):
         self.update()
+        underlying_price = moving_average(self.obj, 3)
         if self.put:
             option = "P"
         else:
             option = "C"
+        if self.pct_otm() < 0:
+            otm_str = str(self.pct_otm()) + " (itm)"
+        else:
+            otm_str = str(self.pct_otm()) 
         return("""
 
         Position: {expiry} {obj} {strike}{call}
         
-        Last price: {price}
+        Underlying price: {underlying}
+        Option price: {price}
         DTE: {dte}
 
         pct_otm = {otm}
         yield = {yields}
 
         """.format(expiry=self.expiry, obj=self.obj.info['symbol'], strike=self.strike, call=option, 
-        price=self.price, dte=self.dte, otm=self.pct_otm(), yields=self.pct_yield()))
+        underlying=underlying_price, price=self.price, dte=self.dte, otm=otm_str, yields=self.pct_yield()))
+
 
     
