@@ -19,3 +19,6 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
 `drip_mgmt.py`: based on positions in a portfolio; dynamically enable DRIP on certain positions. Allows user to adjust annual income by to preference
 
 - Rank all positions in portfolio by your long term interest. Set a desired income level/year and a percentage 'cushion'. This tool will then automate the reinvestment of dividend in certain long term positions, and offer cashflow from positions with a lower long term interest. By reinvesting dividends in certain positions you can grow your long term hold share count, and provide steady cashflow for general use. 
+
+Assumptions:
+- 3 day MA to measure price
