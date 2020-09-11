@@ -15,6 +15,8 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
 - Relative Minimums (Supports):
   - Takes in numerical representation of price/time graph, finds all relative min over past time interval. Relative min data can be used to estimate the existence of support levels, and set strikes appropriately. These will be used as probabilistic variables to determine short strike. 
 
+- Trading Range: 
+  - Use a security's 30, 50 day price range to determine its relative 'valuation' and when a stock trades within a certain percent of its range, it could be an indicator to sell a put with a strike price towards the lower bound
 
 `drip_mgmt.py`: based on positions in a portfolio; dynamically enable DRIP on certain positions. Allows user to adjust annual income by to preference
 
