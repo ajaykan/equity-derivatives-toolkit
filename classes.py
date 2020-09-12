@@ -1,52 +1,54 @@
+import utils
+
 import yfinance as yf
 import datetime
 import numpy as np
 
-# START UTILITY
+# # START UTILITY
 
-def str_to_date(date):  # returns date not datetime
-    date = date.split("-")
-    date = list(map(int, date))
-    return datetime.date(date[0], date[1], date[2])
+# def str_to_date(date):  # returns date not datetime
+#     date = date.split("-")
+#     date = list(map(int, date))
+#     return datetime.date(date[0], date[1], date[2])
 
-def date_to_str(date):
-    year = str(date.year)
-    month = date.month
-    if month < 10:
-        month = "0" + str(month)
-    month = str(month)
-    day = date.day
-    if day < 10:
-        day = "0" + str(day)
-    day = str(day)
-    return "{year}-{month}-{day}".format(year=year, month=month, day=day)
+# def date_to_str(date):
+#     year = str(date.year)
+#     month = date.month
+#     if month < 10:
+#         month = "0" + str(month)
+#     month = str(month)
+#     day = date.day
+#     if day < 10:
+#         day = "0" + str(day)
+#     day = str(day)
+#     return "{year}-{month}-{day}".format(year=year, month=month, day=day)
 
-def date_concat(date): # returns string, concat version of date 2020-07-24 -> 7/24/20 
-    if isinstance(date, str):
-        date = str_to_date(date)
-    month = str(date.month)
-    day = str(date.day)
-    year = str(date.year % 100)
-    return("{month}/{day}/{year}".format(month=month, day=day, year=year))
+# def date_concat(date): # returns string, concat version of date 2020-07-24 -> 7/24/20 
+#     if isinstance(date, str):
+#         date = str_to_date(date)
+#     month = str(date.month)
+#     day = str(date.day)
+#     year = str(date.year % 100)
+#     return("{month}/{day}/{year}".format(month=month, day=day, year=year))
 
-def nearest_expiry(expirations, date): # takes as input list of expiration dates, and date, returns expiration with (expiry - dates) < 3 days
-    for expiry in expirations:
-        expiry = str_to_date(expiry)
-        delta = (expiry - date).days
-        if abs(delta) <= 3:
-            return expiry
-    return ValueError("No expiration within 3 days of date")
+# def nearest_expiry(expirations, date): # takes as input list of expiration dates, and date, returns expiration with (expiry - dates) < 3 days
+#     for expiry in expirations:
+#         expiry = str_to_date(expiry)
+#         delta = (expiry - date).days
+#         if abs(delta) <= 3:
+#             return expiry
+#     return ValueError("No expiration within 3 days of date")
 
-def moving_average(ticker_obj, days): # past real days
-    assert (days > 1), "MA >= 2 days"
+# def moving_average(ticker_obj, days): # past real days
+#     assert (days > 1), "MA >= 2 days"
     
-    days = int(round(days * (5/7)))
-    delta = str(days) + "d"
-    hist = ticker_obj.history(period=delta)
+#     days = int(round(days * (5/7)))
+#     delta = str(days) + "d"
+#     hist = ticker_obj.history(period=delta)
 
-    return round(np.mean(hist["Close"]), 2)
+#     return round(np.mean(hist["Close"]), 2)
 
-# END UTILITY
+# # END UTILITY
 
 
 class Portfolio:
@@ -122,7 +124,7 @@ class Option:
         self.strike = strike
         self.put = put # bool
         if isinstance(expiry, str):
-            expiry = str_to_date(expiry)
+            expiry = utils.str_to_date(expiry)
         
         # options data
         self.price = 0
@@ -136,7 +138,7 @@ class Option:
         # assert(date_to_str(expiry) in ticker_obj.options), "Option error: invalid expiry"
         
         try:
-            expiration = nearest_expiry(self.obj.options, expiry)
+            expiration = utils.nearest_expiry(self.obj.options, expiry)
             self.expiry = expiration
         except:
             self.expiry = False
@@ -154,7 +156,7 @@ class Option:
     def option_data(self): # returns dataframe of options info
         if not self.expiry:
             return("Invalid option; err1")
-        exp_date = date_to_str(self.expiry)
+        exp_date = utils.date_to_str(self.expiry)
         chain = self.obj.option_chain(exp_date)
         if self.put:
             chain = chain.puts
@@ -176,7 +178,7 @@ class Option:
 
     def pct_otm(self): # Puts: stock is $40, strike is $32, pct_otm = 0.20; opposite for Call
         self.update()
-        underlying_price = moving_average(self.obj, 3)
+        underlying_price = utils.moving_average(self.obj, 3)
 
         if self.put:
             delta = underlying_price - self.strike
@@ -194,7 +196,7 @@ class Option:
 
     def __str__(self):
         self.update()
-        underlying_price = moving_average(self.obj, 3)
+        underlying_price = utils.moving_average(self.obj, 3)
         if self.put:
             option = "P"
         else:
