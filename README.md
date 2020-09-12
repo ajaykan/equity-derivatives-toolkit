@@ -12,6 +12,7 @@ Lagging Indicators:
  - trading ranges
  - moving average convergence divergence (MACD)
  - relative strength index (RSI)
+ - support levels
 
 `short_put.py`: allows user to find optimal entry to sell CSP, uses specific statistics
 
