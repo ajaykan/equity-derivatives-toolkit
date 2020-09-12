@@ -6,6 +6,12 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
   - `Position`: user position in one stock	
   - `Option`: stock option with vaalid expiry in future	
   - `Portfolio`: collection of positions and options	
+  
+Lagging Indicators:
+ - moving averages
+ - trading ranges
+ - moving average convergence divergence (MACD)
+ - relative strength index (RSI)
 
 `short_put.py`: allows user to find optimal entry to sell CSP, uses specific statistics
 
