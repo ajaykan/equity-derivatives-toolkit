@@ -25,10 +25,6 @@ Lagging Indicators:
 - Trading Range: 
   - Use a security's 30, 50 day price range to determine its relative 'valuation' and when a stock trades within a certain percent of its range, it could be an indicator to sell a put with a strike price towards/at the lower bound
 
-`drip_mgmt.py`: based on positions in a portfolio; dynamically enable DRIP on certain positions. Allows user to adjust annual income by to preference
-
-- Rank all positions in portfolio by your long term interest. Set a desired income level/year and a percentage 'cushion'. This tool will then automate the reinvestment of dividend in certain long term positions, and offer cashflow from positions with a lower long term interest. By reinvesting dividends in certain positions you can grow your long term hold share count, and provide steady cashflow for general use. 
-
 Assumptions:
 - 3 day MA to measure price
 
