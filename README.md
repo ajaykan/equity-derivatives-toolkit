@@ -7,6 +7,7 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
   - `Option`: stock option with vaalid expiry in future	
   - `Portfolio`: collection of positions and options	
   
+  
 Lagging Indicators:
  - moving averages
  - trading ranges
@@ -27,6 +28,7 @@ Lagging Indicators:
 
 Assumptions:
 - 3 day MA to measure price
+- Relying on multiple indicators can improve probability of profit
 
 
 Options pricing accuracy can vary during market hours
