@@ -25,6 +25,12 @@ Lagging Indicators:
 
 - Trading Range: 
   - Use a security's 30, 50 day price range to determine its relative 'valuation' and when a stock trades within a certain percent of its range, it could be an indicator to sell a put with a strike price towards/at the lower bound
+  
+ - MACD:
+  - Indicator of security under/over bought
+  
+ - RSI:
+  - 
 
 Assumptions:
 - 3 day MA to measure price
