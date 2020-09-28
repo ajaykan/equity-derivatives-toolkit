@@ -17,20 +17,17 @@ Lagging Indicators:
 
 `short_put.py`: allows user to find optimal entry to sell CSP, uses specific statistics
 
-- Moving Averages (MA):
+  - Moving Averages (MA):
     - Looks at typical short put days til expiration (DTE): 15-45 days. Calculates moving average of 15, 45, (and 200 days). Then, recalculate these variables as percent difference compared to current market price. This gives a good idea of where the stock is trading in relation to its recent range.
 
-- Relative Minimums (Supports):
-  - Takes in numerical representation of price/time graph, finds all relative min over past time interval. Relative min data can be used to estimate the existence of support levels, and set strikes appropriately. These will be used as probabilistic variables to determine short strike. 
+  - Relative Minimums (Supports):
+    - Takes in numerical representation of price/time graph, finds all relative min over past time interval. Relative min data can be used to estimate the existence of support levels, and set strikes appropriately. These will be used as probabilistic variables to determine short strike. 
 
-- Trading Range: 
-  - Use a security's 30, 50 day price range to determine its relative 'valuation' and when a stock trades within a certain percent of its range, it could be an indicator to sell a put with a strike price towards/at the lower bound
+  - Trading Range: 
+    - Use a security's 30, 50 day price range to determine its relative 'valuation' and when a stock trades within a certain percent of its range, it could be an indicator to sell a put with a strike price towards/at the lower bound
   
-- MACD:
-  - Indicator of security under/over bought
-  
-- RSI:
-  - 
+  - MACD:
+    - Indicator of security under/over bought
 
 Assumptions:
 - 3 day MA to measure price
