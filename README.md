@@ -9,7 +9,7 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
   
   
 Lagging Indicators:
- - moving averages
+ - moving and exponential averages
  - trading ranges
  - moving average convergence divergence (MACD)
  - relative strength index (RSI)
