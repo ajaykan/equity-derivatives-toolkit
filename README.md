@@ -13,7 +13,7 @@ Uses lagging indicators including but not limited to: exponential/moving average
 `short_put.py`: allows user to find optimal entry to sell CSP by analyzing price movement
 
   - Moving Averages (MA):
-    - Looks at typical short put days til expiration (DTE): 15-45 days. Calculates moving average of 15, 45, (and 200 days). Then, recalculate these variables as percent difference compared to current market price. This gives a good idea of where the stock is trading in relation to its recent range.
+    - Looks at typical short put days til expiration (DTE): 15-45 days. Calculates moving average of 15, 45, and 200 days. Returns value as percent deviation from market value.
 
   - Relative Minimums (Supports):
     - Takes in numerical representation of price/time graph, finds all relative min over past time interval. Relative min data can be used to estimate the existence of support levels to set strikes appropriately. Used as probabilistic variables to determine short strike. 
