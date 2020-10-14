@@ -23,6 +23,7 @@ Uses lagging indicators including but not limited to: exponential/moving average
 
 
 
+/n
 
 Options pricing accuracy can vary during market hours
 Tracked option data updated daily EOD to external database
