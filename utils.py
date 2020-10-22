@@ -1,3 +1,5 @@
+# accessible across package
+
 import datetime
 import numpy as np
 
