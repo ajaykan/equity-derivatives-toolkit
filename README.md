@@ -1,17 +1,9 @@
 # Theta Strategy
 
-This repo contains tools I designed/use to sell cash-secured puts (CSP). These tools use probability to optimize your likelihood of profit. Documentation will be updated as periodically.	
+This repo contains tools I designed/use to sell cash-secured puts (CSP). These tools determine likelihood of profit probabalistically. Uses lagging indicators including but not limited to: exponential/moving averages, moving average convergence divergence (MACD), relative strength index (RSI). Analyzes price action using trading ranges and by approximating support/resistance levels. Documentation will be updated periodically.	
 
-`classes.py`
-User defined objects	
-  - `Position`: user position in one stock	
-  - `Option`: stock option with vaalid expiry in future	
-  - `Portfolio`: collection of positions and options	
-  
-  
-Uses lagging indicators including but not limited to: exponential/moving averages, moving average convergence divergence (MACD), relative strength index (RSI). Analyzes price action using trading ranges and by approximating support/resistance levels.
 
-`short_put.py`
+### `short_put.py`
 Allows user to find optimal entry to sell CSP by analyzing price movement
 
   - Moving Averages (MA):
@@ -22,6 +14,12 @@ Allows user to find optimal entry to sell CSP by analyzing price movement
 
   - Trading Range: 
     - Use a security's 30, 50 day price range to determine its relative 'valuation' and when a stock trades within a certain percent of its range, it could be an indicator to sell a put with a strike price towards/at the lower bound
+    
+### `classes.py`
+User defined objects to be referenced by future tools
+  - `Position`: user position in one stock	
+  - `Option`: stock option with vaalid expiry in future	
+  - `Portfolio`: collection of positions and options	
 
 
 
@@ -33,7 +31,7 @@ Options pricing accuracy can vary during market hours
 Tracked option data updated daily EOD to external database
 Options_tracker used to track daily option price movement
 
-Untracked:
+##### Untracked:
 - option_tracker
 - drip_mgmt
 - income_inv
