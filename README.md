@@ -2,7 +2,8 @@
 
 This repo contains tools I designed/use to sell cash-secured puts (CSP). These tools use probability to optimize your likelihood of profit. Documentation will be updated as periodically.	
 
-`classes.py`: user defined objects	
+`classes.py`
+User defined objects	
   - `Position`: user position in one stock	
   - `Option`: stock option with vaalid expiry in future	
   - `Portfolio`: collection of positions and options	
@@ -10,7 +11,8 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
   
 Uses lagging indicators including but not limited to: exponential/moving averages, moving average convergence divergence (MACD), relative strength index (RSI). Analyzes price action using trading ranges and by approximating support/resistance levels.
 
-`short_put.py`: allows user to find optimal entry to sell CSP by analyzing price movement
+`short_put.py`
+Allows user to find optimal entry to sell CSP by analyzing price movement
 
   - Moving Averages (MA):
     - Looks at typical short put days til expiration (DTE): 15-45 days. Calculates moving average of 15, 45, and 200 days. Returns value as percent deviation from market value.
@@ -30,3 +32,6 @@ Uses lagging indicators including but not limited to: exponential/moving average
 Options pricing accuracy can vary during market hours
 Tracked option data updated daily EOD to external database
 Options_tracker used to track daily option price movement
+
+Untracked:
+option_tracker
