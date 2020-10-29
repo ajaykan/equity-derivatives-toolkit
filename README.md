@@ -34,6 +34,6 @@ Tracked option data updated daily EOD to external database
 Options_tracker used to track daily option price movement
 
 Untracked:
-option_tracker
-drip_mgmt
-income_inv
+- option_tracker
+- drip_mgmt
+- income_inv
