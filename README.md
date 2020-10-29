@@ -35,3 +35,5 @@ Options_tracker used to track daily option price movement
 
 Untracked:
 option_tracker
+drip_mgmt
+income_inv
