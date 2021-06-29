@@ -1,4 +1,4 @@
-# Theta Strategy
+# Options Strategy
 
 This repo contains tools I designed/use to sell cash-secured puts (CSP). These tools determine likelihood of profit probabalistically. Uses lagging indicators including but not limited to: exponential/moving averages, moving average convergence divergence (MACD), relative strength index (RSI). Analyzes price action using trading ranges and by approximating support/resistance levels. Documentation will be updated periodically.	
 
