@@ -4,7 +4,7 @@ This repo contains tools I designed/use to sell cash-secured puts (CSP). These t
 
 
 #### `put-premium.py`
-Allows user to compare ROI of selling various ROI
+Allows user to compare ROI of selling various ROIs
 
 Uses 3-day moving average as reference point
 
