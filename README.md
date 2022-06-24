@@ -8,7 +8,7 @@ Allows user to compare ROI of selling various ROIs
 
 Uses 3-day moving average as reference point
 
-Allows the user to define their percent out-the-money (OTM), used to determine the strike price
+Allows the user to define their percent out-the-money (OTM), used to determine the strike prices
 
 Tool graphs the price of put option at the corresponding strike price in relation to the days til expiration (DTE) to determine theoretical ROI
 
