@@ -19,7 +19,8 @@ Graphs ROI vs DTE of entire 'basket' of stocks to allow easy comparison
 User defined objects to be referenced by future tools
   - `Position`: user position in one stock	
   - `Option`: stock option with vaalid expiry in future	
-  - `Portfolio`: collection of positions and options	
+  - `Portfolio`: collection of positions and options
+  - 
 
 
 
